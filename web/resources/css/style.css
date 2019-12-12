@@ -1,0 +1,70 @@
+/*.shapka {*/
+    /*font-family: Fantasy, serif;*/
+    /*background-image: linear-gradient(to left, violet, blue, green, yellow, orange, red, red);*/
+    /*-webkit-background-clip: text;*/
+    /*-webkit-text-fill-color: transparent;*/
+    /*font-size: 40px;*/
+
+/*}*/
+
+
+/*!*псевдоэлементы*!*/
+/*.shapka:after{*/
+    /*content: " (Вариант №200039)"; !* Добавляем после текста абзаца *!*/
+/*}*/
+
+/*!*атрибуты*!*/
+/*td {*/
+    /*padding: 2%;*/
+/*}*/
+
+/*!*идентификатор*!*/
+/*#content { !*100*!*/
+    /*background-image: url("../pictures/bcg.jpg");*/
+/*}*/
+/*.content { !*10*!*/
+    /*background-image: url("../pictures/pic.png");*/
+/*} !*пример каскадирования. У id(#) специфичность больше, чем у класса, поэтому установятся его атрибуты*!*/
+
+/*!*наследование - весь текст синий*!*/
+/*.main {*/
+    /*background-color: #ffffff;*/
+    /*opacity: 0.9;*/
+    /*color: #0C00FF;*/
+/*}*/
+
+/*.main .error {*/
+    /*color: red;*/
+/*}*/
+
+/*!*классы*!*/
+/*.main img.picture {*/
+    /*width: 300px;*/
+    /*height: 300px;*/
+
+/*}*/
+/*.main p {*/
+    /*margin: 5%;*/
+/*}*/
+
+/*.main form input {*/
+    /*margin-left: 11%;*/
+    /*margin-right: 5%;*/
+    /*margin-top: 2%;*/
+/*}*/
+
+/*.main button.check {*/
+    /*font-size: 20px;*/
+    /*margin-top: 20%*/
+
+/*}*/
+
+/*#graph {*/
+    /*user-select: none;*/
+/*}*/
+
+/*.graph-view {*/
+    /*cursor: pointer;*/
+    /*width: 500px;*/
+    /*margin: 0 20px;*/
+/*}*/

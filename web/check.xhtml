@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>Lab2</title>
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
+</h:head>
+
+<h:body bgcolor="#000">
+    <header align="center">
+        <h1 class="shapka">Заболотских Роман Олегович P3200 (Вариант №200039)</h1>
+    </header>
+    <hr/>
+    <div class="content" id="content">
+        <center>
+            <h:form id="form" style="display: inline-block;">
+                <table class="main">
+                    <tbody>
+                    <tr>
+                        <td width="300px">Для проверки попадания точки в данную область введите данные ниже и нажмите на кнопку, либо нажмите на область.</td>
+                        <td/>
+                        <td>
+                            <canvas id="graph" width="500" height="500" class="graph-view">канвас не поддерживается
+                            </canvas>
+                        </td>
+                    </tr>
+
+                    <tr>
+
+                        <td>X:<br/>
+                            <h:message for="x1" style="color:red"/>
+                            <h:message for="x2" style="color:red"/>
+                            <h:message for="x3" style="color:red"/>
+                            <h:message for="x4" style="color:red"/>
+                            <h:message for="x5" style="color:red"/>
+                            <h:message for="x6" style="color:red"/>
+                            <h:message for="x7" style="color:red"/>
+                        </td>
+
+                        <td/>
+
+                        <td>
+
+                            <p>
+                                <p:selectBooleanCheckbox value="#{Bean.x1}" id="x1" itemLabel="1.5">
+                                    <f:validator validatorId="ValidatorX"/>
+                                </p:selectBooleanCheckbox> -4 <br/>
+                                <p:selectBooleanCheckbox value="#{Bean.x2}" id="x2" itemLabel="1.5">
+                                    <f:validator validatorId="ValidatorX"/>
+                                </p:selectBooleanCheckbox> -3 <br/>
+                                <p:selectBooleanCheckbox value="#{Bean.x3}" id="x3" itemLabel="1.5">
+                                    <f:validator validatorId="ValidatorX"/>
+                                </p:selectBooleanCheckbox> -2 <br/>
+                                <p:selectBooleanCheckbox value="#{Bean.x4}" id="x4" itemLabel="1.5">
+                                    <f:validator validatorId="ValidatorX"/>
+                                </p:selectBooleanCheckbox> -1 <br/>
+                                <p:selectBooleanCheckbox value="#{Bean.x5}" id="x5" itemLabel="1.5">
+                                    <f:validator validatorId="ValidatorX"/>
+                                </p:selectBooleanCheckbox> 0 <br/>
+                                <p:selectBooleanCheckbox value="#{Bean.x6}" id="x6" itemLabel="1.5">
+                                    <f:validator validatorId="ValidatorX"/>
+                                </p:selectBooleanCheckbox> 1 <br/>
+                                <p:selectBooleanCheckbox value="#{Bean.x7}" id="x7" itemLabel="1.5">
+                                    <f:validator validatorId="ValidatorX"/>
+                                </p:selectBooleanCheckbox> 2
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+
+                        <td>Y:<br/>
+
+                            <h:message for="y" style="color:red"/></td>
+
+                        <td/>
+
+                        <td>
+
+                            <p>
+                                <h:inputText a:placeholder="(-3;5)" id="y" value="#{Bean.y}" label="Y"
+                                             converterMessage="Введите R (-3;5)" maxlength="18">
+                                    <f:validator validatorId="ValidatorY"/>
+                                </h:inputText>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+
+                        <td>R:<br/>
+
+                            <h:message for="r" style="color:red"/></td>
+
+                        <td/>
+
+                        <td>
+
+                            <p>
+                                <h:selectOneMenu value="#{Bean.r}" id="r"
+                                                 onchange="redrawGraphView = () => drawView(+this.value.replace(',', '.')); redrawGraphView();">
+                                    <f:selectItem itemValue="1" id="r1"/>
+                                    <f:selectItem itemValue="1.5" id="r2"/>
+                                    <f:selectItem itemValue="2" id="r3"/>
+                                    <f:selectItem itemValue="2.5" id="r4"/>
+                                    <f:selectItem itemValue="3" id="r5"/>
+                                    <f:validator validatorId="ValidatorR"/>
+                                </h:selectOneMenu>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td width="100%" colspan="3" align="center">
+                            <br/><br/>
+                            <h:commandButton action="#{Bean.addToList()}" update="historyPoints dotsTable"
+                                             value="Отправить" id="submitButton">
+                                <br/><br/>
+                                <h:dataTable width="100%" id="dotsTable"
+                                             var="dot"
+                                             value="#{Bean.dots}">
+
+                                    <h:column id="columnX" headerText="X">
+                                        <f:facet name="header">X</f:facet>
+                                        <div align="center"><h:outputText id="xCell" value="#{dot.x}"/></div>
+                                    </h:column>
+
+                                    <h:column id="columnY" headerText="Y">
+                                        <f:facet name="header">Y</f:facet>
+                                        <div align="center"><h:outputText id="yCell" value="#{dot.y}"/></div>
+                                    </h:column>
+                                    <h:column id="columnR" headerText="R">
+                                        <f:facet name="header">R</f:facet>
+                                        <div align="center"><h:outputText id="rCell" value="#{dot.r}"/></div>
+                                    </h:column>
+
+                                    <h:column id="columnResult" headerText="RESULT">
+                                        <f:facet name="header">Попадание</f:facet>
+                                        <div align="center"><h:outputText id="resultCell" value="#{dot.popadanie}"/>
+                                        </div>
+                                    </h:column>
+
+                                </h:dataTable>
+
+                            </h:commandButton>
+
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </h:form>
+
+            <h:form id="formForCanvas" style="display: none;">
+                <h:inputText id="x10" value="#{Bean.userX}"/>
+                <h:inputText id="y10" value="#{Bean.userY}"/>
+                <h:inputText id="r10" value="#{Bean.r}"/>
+                <h:inputText id="fromcanvas" value="#{Bean.fromCanvas}"/>
+                <p:commandButton id="btn10" action="#{Bean.addToList()}" update="historyPoints dotsTable"/>
+            </h:form>
+            <h:outputText id="historyPoints" value="#{Bean.getJsonDots()}" style="display: none;"/>
+
+        </center>
+    </div>
+
+    <script src="resources/js/index.js"></script>
+
+
+</h:body>
+
+</html>
