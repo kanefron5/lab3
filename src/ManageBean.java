@@ -1,7 +1,6 @@
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.print.attribute.standard.RequestingUserName;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,6 +27,7 @@ public class ManageBean implements Serializable {
     private String R = String.valueOf(1);
     private String userX;
     private String userY;
+    private String url = "jdbc:postgresql://pg:5432/studs?loggerLevel=OFF";
 
 
     public String getUserX() {
@@ -67,12 +67,11 @@ public class ManageBean implements Serializable {
         return s.substring(0, s.length() - 1) + "]";
     }
 
-    public ArrayList<Dot> getDots() {
+    public ArrayList<Dot> getDots() throws Exception{
         dots = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            String url = "jdbc:postgresql://127.0.0.1:54321/postgres?loggerLevel=OFF";
-            Connection connection = DriverManager.getConnection(url);
+            Connection connection = DriverManager.getConnection(url, LoginData.login, LoginData.password);
             PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots (id serial primary key , x real, y real, r real, popadanie INTEGER, user_id text);");
             statmt.execute();
             String user = FacesContext.getCurrentInstance().getExternalContext().getSessionId(true);
@@ -89,6 +88,7 @@ public class ManageBean implements Serializable {
 
         } catch (Exception e) {
             e.printStackTrace();
+            throw new Exception(e);
         }
 
 
@@ -206,8 +206,7 @@ public class ManageBean implements Serializable {
         System.out.println(dot);
         try {
             Class.forName("org.postgresql.Driver");
-            String url = "jdbc:postgresql://127.0.0.1:54321/postgres?loggerLevel=OFF";
-            Connection connection = DriverManager.getConnection(url);
+            Connection connection = DriverManager.getConnection(url, LoginData.login, LoginData.password);
 
             PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots (id serial primary key , x real, y real, r real, popadanie INTEGER, user_id text);");
             statmt.execute();
