@@ -12,6 +12,8 @@ import java.util.ArrayList;
 @ApplicationScoped
 public class ManageBean implements Serializable {
 
+    private final boolean helios = true;
+
 
     private static final long serialVersionUID = 1L;
     private boolean x1; //-4
@@ -27,7 +29,8 @@ public class ManageBean implements Serializable {
     private String R = String.valueOf(1);
     private String userX;
     private String userY;
-    private String url = "jdbc:postgresql://pg:5432/studs?loggerLevel=OFF";
+    private String url = helios ? "jdbc:postgresql://pg:5432/studs?loggerLevel=OFF" :
+            "jdbc:postgresql://localhost:54321/postgres?loggerLevel=OFF";
 
 
     public String getUserX() {
@@ -67,16 +70,15 @@ public class ManageBean implements Serializable {
         return s.substring(0, s.length() - 1) + "]";
     }
 
-    public ArrayList<Dot> getDots() throws Exception{
+    public ArrayList<Dot> getDots() throws Exception {
         dots = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(url, LoginData.login, LoginData.password);
-            PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots (id serial primary key , x real, y real, r real, popadanie INTEGER, user_id text);");
+            Connection connection = helios ? DriverManager.getConnection(url, LoginData.login, LoginData.password) : DriverManager.getConnection(url);
+            PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots1 (id serial primary key , x real, y real, r real, popadanie INTEGER);");
             statmt.execute();
-            String user = FacesContext.getCurrentInstance().getExternalContext().getSessionId(true);
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM dots WHERE user_id=?;");
-            statement.setString(1, user);
+
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM dots1;");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 double x = resultSet.getDouble("x");
@@ -109,7 +111,7 @@ public class ManageBean implements Serializable {
     }
 
     public String getY() {
-        if(isFromCanvas()){
+        if (isFromCanvas()) {
             return userY;
         }
         return (y == null) ? "" : y.toString();
@@ -173,7 +175,7 @@ public class ManageBean implements Serializable {
     }
 
     private double getX() {
-        if(isFromCanvas()){
+        if (isFromCanvas()) {
             return Double.parseDouble(userX.replace(",", "."));
         }
         boolean[] b = new boolean[]{x1, x2, x3, x4, x5, x6, x7};
@@ -206,19 +208,15 @@ public class ManageBean implements Serializable {
         System.out.println(dot);
         try {
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(url, LoginData.login, LoginData.password);
-
-            PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots (id serial primary key , x real, y real, r real, popadanie INTEGER, user_id text);");
+            Connection connection = helios ? DriverManager.getConnection(url, LoginData.login, LoginData.password) : DriverManager.getConnection(url);
+            PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots1 (id serial primary key , x real, y real, r real, popadanie INTEGER);");
             statmt.execute();
 
-            String user = FacesContext.getCurrentInstance().getExternalContext().getSessionId(true);
-
-            PreparedStatement st = connection.prepareStatement("INSERT INTO dots (x, y, r, popadanie, user_id) values(?, ?, ?, ?, ?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO dots1 (x, y, r, popadanie) values(?, ?, ?, ?)");
             st.setDouble(1, dot.getX());
             st.setDouble(2, dot.getY());
             st.setDouble(3, dot.getR());
             st.setInt(4, dot.isPopadanie() ? 1 : 0);
-            st.setString(5, user);
 
             st.executeUpdate();
             st.close();
