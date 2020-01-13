@@ -1,7 +1,9 @@
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.faces.webapp.FacesServlet;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -75,7 +77,7 @@ public class ManageBean implements Serializable {
         try {
             Class.forName("org.postgresql.Driver");
             Connection connection = helios ? DriverManager.getConnection(url, LoginData.login, LoginData.password) : DriverManager.getConnection(url);
-            PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots1 (id serial primary key , x real, y real, r real, popadanie INTEGER);");
+            PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots1 (id serial primary key , x double precision, y double precision, r double precision, popadanie INTEGER);");
             statmt.execute();
 
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM dots1;");
@@ -83,6 +85,7 @@ public class ManageBean implements Serializable {
             while (resultSet.next()) {
                 double x = resultSet.getDouble("x");
                 double y = resultSet.getDouble("y");
+                System.out.println("fxdgchvjbnklm:" + y);
                 double r = resultSet.getDouble("r");
                 boolean popadanie = resultSet.getInt("popadanie") == 1;
                 dots.add(new Dot(x, y, r, popadanie));
@@ -209,7 +212,7 @@ public class ManageBean implements Serializable {
         try {
             Class.forName("org.postgresql.Driver");
             Connection connection = helios ? DriverManager.getConnection(url, LoginData.login, LoginData.password) : DriverManager.getConnection(url);
-            PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots1 (id serial primary key , x real, y real, r real, popadanie INTEGER);");
+            PreparedStatement statmt = connection.prepareStatement("CREATE TABLE if not exists dots1 (id serial primary key , x double precision, y double precision, r double precision, popadanie INTEGER);");
             statmt.execute();
 
             PreparedStatement st = connection.prepareStatement("INSERT INTO dots1 (x, y, r, popadanie) values(?, ?, ?, ?)");
